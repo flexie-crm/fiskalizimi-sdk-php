@@ -30,6 +30,11 @@ class Invoice
     /**
      * @var string
      */
+    protected $clientId;
+
+    /**
+     * @var string
+     */
     protected $clientAddress;
 
     /**
@@ -70,7 +75,7 @@ class Invoice
     /**
      * @var string
      */
-    protected $businessProcess;
+    protected $businessProcess = "P1";
 
     /**
      * @var string
@@ -181,6 +186,22 @@ class Invoice
     public function getClientNuis(): string
     {
         return $this->clientNuis;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param string $clientId
+     */
+    public function setClientId(string $clientId)
+    {
+        $this->clientId = $clientId;
     }
 
     /**
@@ -477,67 +498,6 @@ class Invoice
     public function setItems(InvoiceItem $item)
     {
         $this->items[] = $item;
-    }
-
-    /**
-     * @param string $nslf
-     */
-    public function setNslf(string $nslf)
-    {
-        $this->nslf = $nslf;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNslf(): string
-    {
-        return $this->nslf;
-    }
-
-    /**
-     * @param string $nivf
-     */
-    public function setNivf(string $nivf)
-    {
-        $this->nivf = $nivf;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNivf(): string
-    {
-        return $this->nivf;
-    }
-
-    /**
-     * @return string
-     */
-    public function getQrCodeUrl(): string
-    {
-        return $this->qrCodeUrl;
-    }
-
-    /**
-     * @param string $qrCodeUrl
-     */
-    public function setQrCodeUrl(string $qrCodeUrl)
-    {
-        $this->qrCodeUrl = $qrCodeUrl;
-    }
-
-    /**
-     * @return array
-     */
-    public function getVatGroups(): array
-    {
-        return $this->vatGroups;
-    }
-
-    public function setVatGroups(array $vatGroups)
-    {
-        $this->vatGroups = $vatGroups;
     }
 
     /**

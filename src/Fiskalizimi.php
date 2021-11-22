@@ -4,10 +4,8 @@ namespace Flexie\Fatura;
 
 use DateTime;
 use Exception;
-use Flexie\Fatura\Endpoint;
-use Flexie\Fatura\Invoice;
-use GuzzleHttp\Client;
 use Firebase\JWT\JWT;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -15,14 +13,13 @@ use Psr\Http\Message\ResponseInterface;
 class Fiskalizimi
 {
     /**
-     * @var string
-     */
-    private $key;
-
-    /**
      * @var Invoice
      */
     protected $invoice;
+    /**
+     * @var string
+     */
+    private $key;
 
     public function __construct($key)
     {
@@ -38,6 +35,85 @@ class Fiskalizimi
         $this->newInvoiceToFlexie($method);
 
         return $this->invoice;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function newInvoiceToFlexie($method = "sync")
+    {
+        if (!$this->invoice instanceof Invoice) {
+            throw new Exception("Invoice object not initialized. Create Invoice object first, then send to Flexie");
+        }
+
+        try {
+            /**@var GuzzleResponse $res */
+            $res = $this->sendPayload(($method == "sync") ? Endpoint::FX_NEW_INVOICE : Endpoint::FX_NEW_INVOICE_ASYNC, $this->invoice->toArray());
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+
+        if ($res->getStatusCode() == 200) {
+            $result = json_decode($res->getBody(), true);
+
+            // Check if it's an ok response
+            if (!isset($result["ok"]) || !$result["ok"]) {
+                throw new Exception("There was an error at Fiskalizimi. Error Code " . $result["fz_error_code"] . ". Error Message " . $result["fz_error_message"]);
+            }
+
+            // Enrich invoice properties
+            foreach ($result as $key => $value) {
+                $this->invoice->enrichInvoiceProperties($key, $value);
+            }
+        } else {
+            throw new Exception("There was an error on HTTP request, failed with code " . $res->getStatusCode() . ". " . $res->getBody()->getContents());
+        }
+    }
+
+    /**
+     * @param string[] $endpoint
+     * @param array $payload
+     * @return ResponseInterface
+     * @throws Exception
+     */
+    private function sendPayload(array $endpoint, array $payload): ResponseInterface
+    {
+        $tokenIssuedDate = new DateTime();
+        $tokenExpireDate = new DateTime('+1 hour');
+
+        $token = JWT::encode([
+            "iss" => $endpoint["key"],
+            "iat" => $tokenIssuedDate->getTimestamp(),
+            "exp" => $tokenExpireDate->getTimestamp(),
+        ], $endpoint["secret"]);
+
+        $client = new Client([
+            'base_uri' => $endpoint["url"],
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'token' => $token,
+                'key' => $this->key
+            ]
+        ]);
+
+        try {
+            $response = $client->request('POST', '', [
+                'json' => $payload
+            ]);
+
+            // Try to decode first
+            $responseDecoded = json_decode($response->getBody(), true);
+
+            if (isset($responseDecoded["active"]) && !$responseDecoded["active"]) {
+                throw new Exception("Client with KEY " . $this->key . " it's not active, please contact support@flexie.io");
+            }
+
+            return $response;
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        } catch (GuzzleException $ex) {
+            throw new Exception($ex->getMessage());
+        }
     }
 
     /**
@@ -60,7 +136,7 @@ class Fiskalizimi
         }
 
         if ($res->getStatusCode() == 200) {
-            return (boolean) json_decode($res->getBody(), true)["found"] ?? false;
+            return (boolean)json_decode($res->getBody(), true)["found"] ?? false;
         }
 
         return false;
@@ -107,84 +183,5 @@ class Fiskalizimi
         }
 
         return false;
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function newInvoiceToFlexie ($method = "sync")
-    {
-        if (!$this->invoice instanceof Invoice) {
-            throw new Exception("Invoice object not initialized. Create Invoice object first, then send to Flexie");
-        }
-
-        try {
-            /**@var GuzzleResponse $res */
-            $res = $this->sendPayload(($method == "sync") ? Endpoint::FX_NEW_INVOICE : Endpoint::FX_NEW_INVOICE_ASYNC, $this->invoice->toArray());
-        } catch (Exception $ex) {
-            throw new Exception($ex->getMessage());
-        }
-
-        if ($res->getStatusCode() == 200) {
-            $result = json_decode($res->getBody(), true);
-
-            // Check if it's an ok response
-            if (!isset($result["ok"]) || !$result["ok"]) {
-                throw new Exception("There was an error at Fiskalizimi. Error Code " . $result["fz_error_code"] ?? $res->getStatusCode() . ". Error Message " . $result["fz_error_message"] ?? $res->getBody()->getContents());
-            }
-
-            // Enrich invoice properties
-            foreach ($result as $key => $value) {
-                $this->invoice->enrichInvoiceProperties($key, $value);
-            }
-        } else {
-            throw new Exception("There was an error on HTTP request, failed with code " . $res->getStatusCode() . ". " . $res->getBody()->getContents());
-        }
-    }
-
-    /**
-     * @param string[] $endpoint
-     * @param array $payload
-     * @return ResponseInterface
-     * @throws Exception
-     */
-    private function sendPayload (array $endpoint, array $payload): ResponseInterface
-    {
-        $tokenIssuedDate = new DateTime();
-        $tokenExpireDate = new DateTime('+1 hour');
-
-        $token = JWT::encode([
-            "iss" => $endpoint["key"],
-            "iat" => $tokenIssuedDate->getTimestamp(),
-            "exp" => $tokenExpireDate->getTimestamp(),
-        ], $endpoint["secret"]);
-
-        $client = new Client([
-            'base_uri' => $endpoint["url"],
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'token' => $token,
-                'key' => $this->key
-            ]
-        ]);
-
-        try {
-            $response = $client->request('POST', '', [
-                'json' => $payload
-            ]);
-
-            // Try to decode first
-            $responseDecoded = json_decode($response->getBody(), true);
-
-            if (isset($responseDecoded["active"]) && !$responseDecoded["active"]) {
-                throw new Exception("Client with KEY " . $this->key . " it's not active, please contact support@flexie.io");
-            }
-
-            return $response;
-        } catch (Exception $ex) {
-            throw new Exception($ex->getMessage());
-        } catch (GuzzleException $ex) {
-            throw new Exception($ex->getMessage());
-        }
     }
 }
