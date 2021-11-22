@@ -55,7 +55,7 @@ class Invoice
     /**
      * @var string
      */
-    protected $autoInvoiceType = "AGREEMENT";
+    protected $autoInvoiceType;
 
     /**
      * @var int
@@ -85,7 +85,7 @@ class Invoice
     /**
      * @var string
      */
-    protected $businessProcess = "P1";
+    protected $businessProcess;
 
     /**
      * @var string
