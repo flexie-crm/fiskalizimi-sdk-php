@@ -80,6 +80,11 @@ class Invoice
     /**
      * @var string
      */
+    protected $paymentType;
+
+    /**
+     * @var string
+     */
     protected $businessProcess = "P1";
 
     /**
@@ -136,6 +141,11 @@ class Invoice
      * @var string
      */
     protected $sendToEmail;
+
+    /**
+     * @var array
+     */
+    protected $errors = [];
 
     /**
      * @return string
@@ -359,6 +369,27 @@ class Invoice
     public function setPaymentMethod($paymentMethod)
     {
         $this->paymentMethod = $paymentMethod;
+
+        // Set also paymentType which is derived from the paymentMethod
+        switch ($paymentMethod) {
+            case Fx::PAYMENT_METHOD_CASH:
+            case Fx::PAYMENT_METHOD_CREDIT_CARD:
+            case Fx::PAYMENT_METHOD_CHECK:
+            case Fx::PAYMENT_METHOD_SVOUCHER:
+            case Fx::PAYMENT_METHOD_COMPANY:
+            case Fx::PAYMENT_METHOD_ORDER:
+                $this->setPaymentType("CASH");
+                break;
+            case Fx::PAYMENT_METHOD_BANK:
+            case Fx::PAYMENT_METHOD_FACTORING:
+            case Fx::PAYMENT_METHOD_COMPENSATION:
+            case Fx::PAYMENT_METHOD_TRANSFER:
+            case Fx::PAYMENT_METHOD_WAIVER:
+            case Fx::PAYMENT_METHOD_KIND:
+            case Fx::PAYMENT_METHOD_OTHER:
+                $this->setPaymentType("NONCASH");
+                break;
+        }
     }
 
     /**
@@ -556,6 +587,38 @@ class Invoice
     public function enrichInvoiceProperties(string $name, $value)
     {
         $this->{$name} = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentType(): string
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * @param string $paymentType
+     */
+    private function setPaymentType(string $paymentType)
+    {
+        $this->paymentType = $paymentType;
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
+     * @param string
+     */
+    private function setErrors(string $error)
+    {
+        $this->errors[] = $error;
     }
 
     /**

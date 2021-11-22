@@ -18,15 +18,15 @@ $invoice->setClientNuis("M01315009J");
 $invoice->setClientAddress("Rruga Barrikadave");
 $invoice->setClientCity("Tirane");
 $invoice->setClientCountryCode("ALB");
-$invoice->setInvoiceType(Fx::AUTO_INVOICE);
-$invoice->setAutoInvoiceType(Fx::AUTO_INVOICE_ABROAD);
+$invoice->setInvoiceType(Fx::B2B);
+// $invoice->setAutoInvoiceType(Fx::AUTO_INVOICE_ABROAD);
 $invoice->setBusinessProcess("P2");
-$invoice->setPaymentMethod("ACCOUNT");
+$invoice->setPaymentMethod(Fx::PAYMENT_METHOD_FACTORING);
 $invoice->setCurrency("ALL");
 $invoice->setVatTotal(40);
 $invoice->setTotalBeforeVat(200);
 $invoice->setTotalAfterVat(240);
-// $invoice->overrideTcrCode("bn439px779");
+$invoice->overrideTcrCode("bn439px779");
 $invoice->setBankName("Raiffeisen Bank");
 $invoice->setBankSwift("SGSBALTX");
 $invoice->setBankIban("AL09202110130000008001003841");
@@ -64,7 +64,7 @@ $item->setVatTotal(20);
 $invoice->setItems($item);
 
 try {
-    $invoiceDone = $fiskalizimi->newInvoice($invoice, Fx::SYNC)->toArray();
+    $invoiceDone = $fiskalizimi->newInvoice($invoice, Fx::ASYNC)->toArray();
     print_r($invoiceDone);
 } catch (Exception $e) {
     print_r($e->getMessage());
