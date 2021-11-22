@@ -10,22 +10,12 @@ class Invoice
     /**
      * @var string
      */
-    protected $nslf;
+    protected $operatorCode;
 
     /**
      * @var string
      */
-    protected $nivf;
-
-    /**
-     * @var string
-     */
-    protected $qrCodeUrl;
-
-    /**
-     * @var array
-     */
-    protected $vatGroups = [];
+    protected $tcrCode;
 
     /**
      * @var string
@@ -136,6 +126,38 @@ class Invoice
      * @var string
      */
     protected $sendToEmail;
+
+    /**
+     * @return string
+     */
+    public function getOperatorCode(): string
+    {
+        return $this->operatorCode;
+    }
+
+    /**
+     * @param string $operatorCode
+     */
+    public function overrideOperatorCode(string $operatorCode)
+    {
+        $this->operatorCode = $operatorCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTcrCode(): string
+    {
+        return $this->tcrCode;
+    }
+
+    /**
+     * @param string $tcrCode
+     */
+    public function overrideTcrCode(string $tcrCode)
+    {
+        $this->tcrCode = $tcrCode;
+    }
 
     /**
      * @return string
@@ -548,6 +570,11 @@ class Invoice
     public function setSendToEmail(string $sendToEmail)
     {
         $this->sendToEmail = $sendToEmail;
+    }
+
+    public function enrichInvoiceProperties(string $name, $value)
+    {
+        $this->{$name} = $value;
     }
 
     /**

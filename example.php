@@ -12,21 +12,22 @@ $start = microtime(true);
 $fiskalizimi = new Fiskalizimi("Tw8Yewd1U0d4hViNzGrbLliRlteKTMBT");
 
 $invoice = new Invoice();
-$invoice->setClientName("Eriol Gjerji");
-$invoice->setClientNuis("M01315009J");
-$invoice->setClientAddress("Rruga Barrikadave");
-$invoice->setClientCity("Tirane");
-$invoice->setClientCountryCode("ALB");
-$invoice->setInvoiceType("b2b");
-$invoice->setBusinessProcess("P2");
-$invoice->setPaymentMethod("ACCOUNT");
+// $invoice->setClientName("Eriol Gjerji");
+// $invoice->setClientNuis("M01315009J");
+// $invoice->setClientAddress("Rruga Barrikadave");
+// $invoice->setClientCity("Tirane");
+// $invoice->setClientCountryCode("ALB");
+$invoice->setInvoiceType("b2c");
+// $invoice->setBusinessProcess("P2");
+$invoice->setPaymentMethod("BANKNOTE");
 $invoice->setCurrency("ALL");
 $invoice->setVatTotal(40);
 $invoice->setTotalBeforeVat(200);
 $invoice->setTotalAfterVat(240);
-$invoice->setBankName("Raiffeisen Bank");
-$invoice->setBankSwift("SGSBALTX");
-$invoice->setBankIban("AL09202110130000008001003841");
+$invoice->overrideTcrCode("bn439px779");
+// $invoice->setBankName("Raiffeisen Bank");
+// $invoice->setBankSwift("SGSBALTX");
+// $invoice->setBankIban("AL09202110130000008001003841");
 
 // Add some callback if you want to get back the full data of invoice
 // $invoice->setWebhookCallback("https://fx.flexie.io/listener/f03176aa4c2d4de93f964af09a942001/5e3fb5ea2c792dfca9782b512953911a");
@@ -61,7 +62,7 @@ $item->setVatTotal(20);
 $invoice->setItems($item);
 
 try {
-    $invoiceDone = $fiskalizimi->newInvoice($invoice, Fx::ASYNC)->toArray();
+    $invoiceDone = $fiskalizimi->newInvoice($invoice, Fx::SYNC)->toArray();
     print_r($invoiceDone);
 } catch (Exception $e) {
     print_r($e->getMessage());

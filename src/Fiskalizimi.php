@@ -133,20 +133,9 @@ class Fiskalizimi
                 throw new Exception("There was an error at Fiskalizimi. Error Code " . $result["fz_error_code"] ?? $res->getStatusCode() . ". Error Message " . $result["fz_error_message"] ?? $res->getBody()->getContents());
             }
 
-            if (isset($result["nslf"])) {
-                $this->invoice->setNslf($result["nslf"]);
-            }
-
-            if (isset($result["nivf"])) {
-                $this->invoice->setNivf($result["nivf"]);
-            }
-
-            if (isset($result["vat_groups"])) {
-                $this->invoice->setVatGroups($result["vat_groups"]);
-            }
-
-            if (isset($result["qr_code_url"])) {
-                $this->invoice->setQrCodeUrl($result["qr_code_url"]);
+            // Enrich invoice properties
+            foreach ($result as $key => $value) {
+                $this->invoice->enrichInvoiceProperties($key, $value);
             }
         } else {
             throw new Exception("There was an error on HTTP request, failed with code " . $res->getStatusCode() . ". " . $res->getBody()->getContents());
