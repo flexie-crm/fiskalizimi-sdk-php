@@ -53,6 +53,11 @@ class Invoice
     protected $invoiceType;
 
     /**
+     * @var string
+     */
+    protected $autoInvoiceType = "AGREEMENT";
+
+    /**
      * @var int
      */
     protected $dueDate;
@@ -274,6 +279,22 @@ class Invoice
     public function setInvoiceType($invoiceType)
     {
         $this->invoiceType = $invoiceType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAutoInvoiceType(): string
+    {
+        return $this->autoInvoiceType;
+    }
+
+    /**
+     * @param string $autoInvoiceType
+     */
+    public function setAutoInvoiceType(string $autoInvoiceType)
+    {
+        $this->autoInvoiceType = $autoInvoiceType;
     }
 
     /**

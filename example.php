@@ -13,22 +13,23 @@ $fiskalizimi = new Fiskalizimi("Tw8Yewd1U0d4hViNzGrbLliRlteKTMBT");
 
 $invoice = new Invoice();
 $invoice->setClientName("Eriol Gjerji");
-$invoice->setClientId("J345353345J");
-// $invoice->setClientNuis("M01315009J");
+// $invoice->setClientId("J345353345J");
+$invoice->setClientNuis("M01315009J");
 $invoice->setClientAddress("Rruga Barrikadave");
 $invoice->setClientCity("Tirane");
 $invoice->setClientCountryCode("ALB");
-$invoice->setInvoiceType(Fx::B2C);
-// $invoice->setBusinessProcess("P2");
+$invoice->setInvoiceType(Fx::AUTO_INVOICE);
+$invoice->setAutoInvoiceType(Fx::AUTO_INVOICE_ABROAD);
+$invoice->setBusinessProcess("P2");
 $invoice->setPaymentMethod("ACCOUNT");
 $invoice->setCurrency("ALL");
 $invoice->setVatTotal(40);
 $invoice->setTotalBeforeVat(200);
 $invoice->setTotalAfterVat(240);
 // $invoice->overrideTcrCode("bn439px779");
-// $invoice->setBankName("Raiffeisen Bank");
-// $invoice->setBankSwift("SGSBALTX");
-// $invoice->setBankIban("AL09202110130000008001003841");
+$invoice->setBankName("Raiffeisen Bank");
+$invoice->setBankSwift("SGSBALTX");
+$invoice->setBankIban("AL09202110130000008001003841");
 
 // Add some callback if you want to get back the full data of invoice
 // $invoice->setWebhookCallback("https://fx.flexie.io/listener/f03176aa4c2d4de93f964af09a942001/5e3fb5ea2c792dfca9782b512953911a");
