@@ -30,6 +30,18 @@ abstract class Endpoint
         "secret" => "2u3IV6z2SO5EokmOI2dtjPzh5C9VSPXVk1Ef8di12oFrI2fr5t"
     ];
 
+    const FX_NEW_TCR = [
+        "url" => "https://fatura.flexie.io/listener/500297db6d691ff37b1441a4adda95af/132f636d5dcf4942bf8120246a38f88e",
+        "key" => "L1TyUloAw2uM6GO4QpIINFqWteyPmjrkxBt0u1Gdo5FhTEj0eH",
+        "secret" => "ofoTT3zCFTGeYXzhm29DMYiOdQx3MTAa9Y421DFGxmVwjvNFxX"
+    ];
+
+    const FX_EDIT_TCR = [
+        "url" => "https://fatura.flexie.io/listener/97122cf0f7afd50c9577eda2dfe70d17/cc9910e4627bb40fa4ec435d38268df9",
+        "key" => "5dYQVxIWWq5snpUzL4vN93vDIrnAgNdFgorbVJMlkn1mmCNJ6b",
+        "secret" => "cL6q8bowJJZL0KMIf0WkUTUdF9RQvkBH5H8eTwLCgLngvaZLaW"
+    ];
+
     const FX_VERIFY_NUIS = [
         "url" => "https://fatura.flexie.io/listener/1badf25a0acce9a818f80c89a731c866/6dd661d4a756c7df5c0afa1a97ea87fa",
         "key" => "LHZOM4tx7K0umNuVAA2CqxakjlubosvddkaKmmWYgQdDFya46b",

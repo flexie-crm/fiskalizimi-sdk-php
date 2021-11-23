@@ -172,6 +172,73 @@ class Fiskalizimi
     }
 
     /**
+     * @throws Exception
+     */
+    public function addTcr(DateTime $validFrom, DateTime $validTo = null): string
+    {
+        $tcrValidity = [
+            "validFrom" => $validFrom->format("Y-m-d")
+        ];
+
+        if ($validTo) {
+            $tcrValidity["validTo"] = $validTo->format("Y-m-d");
+        }
+
+        try {
+            /**@var GuzzleResponse $res */
+            $res = $this->sendPayload(Endpoint::FX_NEW_TCR, $tcrValidity);
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+
+        if ($res->getStatusCode() == 200) {
+            $result = json_decode($res->getBody(), true);
+
+            // Check if it's an ok response
+            if (!isset($result["ok"]) || !$result["ok"]) {
+                throw new Exception("There was an error at New TCR. Error Code " . $result["fz_error_code"] . ". Error Message " . $result["fz_error_message"]);
+            }
+
+            return $result["tcrCode"] ?? "";
+        } else {
+            throw new Exception("Error on getting new TCRCode from Flexie Service. Error Code " . $res->getStatusCode() . ". Error Message " . $res->getBody()->getContents());
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function editTcr(string $tcrCode, DateTime $validTo): bool
+    {
+        if (empty($tcrCode)) {
+            throw new Exception("Please provide a valid TCR Code you want to edit");
+        }
+
+        try {
+            /**@var GuzzleResponse $res */
+            $res = $this->sendPayload(Endpoint::FX_EDIT_TCR, [
+                "tcrCode" => $tcrCode,
+                "validTo" => $validTo->format("Y-m-d")
+            ]);
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+
+        if ($res->getStatusCode() == 200) {
+            $result = json_decode($res->getBody(), true);
+
+            // Check if it's an ok response
+            if (!isset($result["ok"]) || !$result["ok"]) {
+                throw new Exception("There was an error on editing TCR. Error Code " . $result["fz_error_code"] . ". Error Message " . $result["fz_error_message"]);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param string[] $endpoint
      * @param array $payload
      * @return ResponseInterface

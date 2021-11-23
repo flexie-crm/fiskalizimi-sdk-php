@@ -30,4 +30,8 @@ class Fx
     const PAYMENT_METHOD_WAIVER = "WAIVER";
     const PAYMENT_METHOD_KIND = "KIND";
     const PAYMENT_METHOD_OTHER = "OTHER";
+
+    const BUSINESS_PROCESS_P1 = "P1";
+    const BUSINESS_PROCESS_P2 = "P2";
+    const BUSINESS_PROCESS_P6 = "P6";
 }
