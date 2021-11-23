@@ -4,6 +4,8 @@ namespace Flexie\Fatura;
 
 abstract class Endpoint
 {
+    const FX_GET_CURRENCY_RATE = "https://flexie.io/currency";
+
     const FX_NEW_INVOICE = [
         "url" => "https://fatura.flexie.io/listener/063683f90a4a4b2af1cbb8093ec3cbd2/37703aa073a8fa95d622ec764d6c4bdc",
         "key" => "0FlkkYB1RURvwhXehzfoOkBvrJjp0bgxTDKfESSqYpHw8szqGp",
@@ -32,5 +34,11 @@ abstract class Endpoint
         "url" => "https://fatura.flexie.io/listener/1badf25a0acce9a818f80c89a731c866/6dd661d4a756c7df5c0afa1a97ea87fa",
         "key" => "LHZOM4tx7K0umNuVAA2CqxakjlubosvddkaKmmWYgQdDFya46b",
         "secret" => "2HoP3lUQ9vlwvBLICWlb52mkonfXXtceC8Wt9MgDOTUrRTMepH"
+    ];
+
+    const FX_GET_EIC = [
+        "url" => "https://fatura.flexie.io/listener/9d974cbb3f6cb0f49831d66fdfa46101/d0868f01db5976c567c673d445bdbfca",
+        "key" => "zNWOTZIoiHmpChBmI5bk5AZfcD3pcyULlQAeQjD800yCh9Y0e9",
+        "secret" => "kjKjyWWBm9ahVv7vKXOo6OpErGNqH2z1mkkUhhwDrHUmd2SX0G"
     ];
 }

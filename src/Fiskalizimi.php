@@ -71,6 +71,107 @@ class Fiskalizimi
     }
 
     /**
+     * @throws Exception
+     */
+    public function validateNuis(string $nuis): bool
+    {
+        // Check NUIS format first
+        if (!preg_match('/^[a-zA-Z](.[0-9]{1,8}[a-zA-Z])?$/', $nuis)) {
+            throw new Exception("NUIS does not match pattern of starting and ending with a letter, and being 10 characters in length (/^[a-zA-Z](.[0-9]{1,8}[a-zA-Z])?$/).");
+        }
+
+        try {
+            /**@var GuzzleResponse $res */
+            $res = $this->sendPayload(Endpoint::FX_VERIFY_NUIS, [
+                "nuis" => $nuis
+            ]);
+        } catch (Exception $ex) {
+            throw new Exception($ex);
+        }
+
+        if ($res->getStatusCode() == 200) {
+            return (boolean) json_decode($res->getBody(), true)["found"] ?? false;
+        }
+
+        return false;
+    }
+
+    public function getCurrencyRate(): array
+    {
+        $client = new Client();
+        $response = $client->get(Endpoint::FX_GET_CURRENCY_RATE);
+
+        if ($response->getStatusCode() == 200) {
+            return json_decode($response->getBody(), true);
+        }
+
+        return [];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getEInvoiceCode(string $nivf): string
+    {
+        if (empty($nivf)) {
+            throw new Exception("Please provide a valid NIVF code in order to retrieve EIC");
+        }
+
+        try {
+            /**@var GuzzleResponse $res */
+            $res = $this->sendPayload(Endpoint::FX_GET_EIC, [
+                "nivf" => $nivf
+            ]);
+        } catch (Exception $ex) {
+            throw new Exception($ex);
+        }
+
+        if ($res->getStatusCode() == 200) {
+            return json_decode($res->getBody(), true)["eic"] ?? "";
+        }
+
+        return "";
+    }
+
+    public function getInvoicePdf(string $eic)
+    {
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function tcrOperation(string $type, float $amount, $method = "sync"): bool
+    {
+        if (!in_array($type, ["INITIAL", "WITHDRAW", "DEPOSIT"])) {
+            throw new Exception("Bad TCR Operation, it should be either one of the following: INITIAL, WITHDRAW or DEPOSIT");
+        }
+
+        try {
+            /**@var GuzzleResponse $res */
+            $res = $this->sendPayload(($method == "sync") ? Endpoint::FX_TCR_OPERATION : Endpoint::FX_TCR_OPERATION_ASYNC, [
+                "operation" => $type,
+                "amount" => $amount
+            ]);
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+
+        if ($res->getStatusCode() == 200) {
+            $result = json_decode($res->getBody(), true);
+
+            // Check if it's an ok response
+            if (!isset($result["ok"]) || !$result["ok"]) {
+                throw new Exception("There was an error at TCR Operation. Error Code " . $result["fz_error_code"] . ". Error Message " . $result["fz_error_message"]);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param string[] $endpoint
      * @param array $payload
      * @return ResponseInterface
@@ -114,74 +215,5 @@ class Fiskalizimi
         } catch (GuzzleException $ex) {
             throw new Exception($ex->getMessage());
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function validateNuis(string $nuis): bool
-    {
-        // Check NUIS format first
-        if (!preg_match('/^[a-zA-Z](.[0-9]{1,8}[a-zA-Z])?$/', $nuis)) {
-            throw new Exception("NUIS does not match pattern of starting and ending with a letter, and being 10 characters in length (/^[a-zA-Z](.[0-9]{1,8}[a-zA-Z])?$/).");
-        }
-
-        try {
-            /**@var GuzzleResponse $res */
-            $res = $this->sendPayload(Endpoint::FX_VERIFY_NUIS, [
-                "nuis" => $nuis
-            ]);
-        } catch (Exception $ex) {
-            throw new Exception($ex);
-        }
-
-        if ($res->getStatusCode() == 200) {
-            return (boolean)json_decode($res->getBody(), true)["found"] ?? false;
-        }
-
-        return false;
-    }
-
-    public function getEInvoiceCode(string $nivf): string
-    {
-
-    }
-
-    public function getInvoicePdf(string $eic)
-    {
-
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function tcrOperation(string $type, float $amount, $method = "sync"): bool
-    {
-        if (!in_array($type, ["INITIAL", "WITHDRAW", "DEPOSIT"])) {
-            throw new Exception("Bad TCR Operation, it should be either one of the following: INITIAL, WITHDRAW or DEPOSIT");
-        }
-
-        try {
-            /**@var GuzzleResponse $res */
-            $res = $this->sendPayload(($method == "sync") ? Endpoint::FX_TCR_OPERATION : Endpoint::FX_TCR_OPERATION_ASYNC, [
-                "operation" => $type,
-                "amount" => $amount
-            ]);
-        } catch (Exception $ex) {
-            throw new Exception($ex->getMessage());
-        }
-
-        if ($res->getStatusCode() == 200) {
-            $result = json_decode($res->getBody(), true);
-
-            // Check if it's an ok response
-            if (!isset($result["ok"]) || !$result["ok"]) {
-                throw new Exception("There was an error at TCR Operation. Error Code " . $result["fz_error_code"] . ". Error Message " . $result["fz_error_message"]);
-            }
-
-            return true;
-        }
-
-        return false;
     }
 }
