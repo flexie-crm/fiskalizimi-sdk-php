@@ -174,19 +174,24 @@ class Fiskalizimi
     /**
      * @throws Exception
      */
-    public function addTcr(DateTime $validFrom, DateTime $validTo = null): string
+    public function addTcr(string $tcrIdentifier, DateTime $validFrom, DateTime $validTo = null): string
     {
-        $tcrValidity = [
+        if (empty($tcrIdentifier)) {
+            throw new Exception("Please provide an alpha-numeric identifier for this TCR, as it would be needed later on, in case you edit it.");
+        }
+
+        $tcr = [
+            "tcrIdentifier" => $tcrIdentifier,
             "validFrom" => $validFrom->format("Y-m-d")
         ];
 
         if ($validTo) {
-            $tcrValidity["validTo"] = $validTo->format("Y-m-d");
+            $tcr["validTo"] = $validTo->format("Y-m-d");
         }
 
         try {
             /**@var GuzzleResponse $res */
-            $res = $this->sendPayload(Endpoint::FX_NEW_TCR, $tcrValidity);
+            $res = $this->sendPayload(Endpoint::FX_NEW_TCR, $tcr);
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());
         }
@@ -208,16 +213,16 @@ class Fiskalizimi
     /**
      * @throws Exception
      */
-    public function editTcr(string $tcrCode, DateTime $validTo): bool
+    public function editTcr(string $tcrIdentifier, DateTime $validTo): bool
     {
-        if (empty($tcrCode)) {
-            throw new Exception("Please provide a valid TCR Code you want to edit");
+        if (empty($tcrIdentifier)) {
+            throw new Exception("Please provide a valid TCR Identifier you want to edit");
         }
 
         try {
             /**@var GuzzleResponse $res */
             $res = $this->sendPayload(Endpoint::FX_EDIT_TCR, [
-                "tcrCode" => $tcrCode,
+                "tcrIdentifier" => $tcrIdentifier,
                 "validTo" => $validTo->format("Y-m-d")
             ]);
         } catch (Exception $ex) {
