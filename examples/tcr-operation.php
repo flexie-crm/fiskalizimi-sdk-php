@@ -1,6 +1,7 @@
 <?php
 
 use Flexie\Fatura\Fiskalizimi;
+use Flexie\Fatura\Fx;
 
 require __DIR__ . "/../vendor/autoload.php";
 $start = microtime(true);
@@ -9,9 +10,12 @@ $start = microtime(true);
 $fiskalizimi = new Fiskalizimi("Tw8Yewd1U0d4hViNzGrbLliRlteKTMBT");
 
 try {
-    // Get Invoice EIC code from your invoice NIVF Code
-    $eic = $fiskalizimi->getEInvoiceCode("cc8d08a4-e46e-4442-a2c5-6e8073c05fc9");
-    echo $eic;
+    // Operations in TCR, INITIAL, DEPOSIT, WITHDRAW
+    $operation = $fiskalizimi->tcrOperation("INITIAL", 0.00, Fx::ASYNC);
+    print_r($operation);
+
+    $operation = $fiskalizimi->tcrOperation("DEPOSIT", 2000.00, Fx::SYNC);
+    print_r($operation);
 } catch (Exception $e) {
     print_r($e->getMessage());
 }
