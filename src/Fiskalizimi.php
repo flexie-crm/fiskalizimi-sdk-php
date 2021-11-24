@@ -141,18 +141,24 @@ class Fiskalizimi
     /**
      * @throws Exception
      */
-    public function tcrOperation(string $type, float $amount, $method = "sync"): bool
+    public function tcrOperation(string $type, float $amount, string $overrideTcrCode = null, $method = "sync"): bool
     {
         if (!in_array($type, ["INITIAL", "WITHDRAW", "DEPOSIT"])) {
             throw new Exception("Bad TCR Operation, it should be either one of the following: INITIAL, WITHDRAW or DEPOSIT");
         }
 
+        $tcr = [
+            "operation" => $type,
+            "amount" => $amount
+        ];
+
+        if ($overrideTcrCode) {
+            $tcr["overrideTcrCode"] = $overrideTcrCode;
+        }
+
         try {
             /**@var GuzzleResponse $res */
-            $res = $this->sendPayload(($method == "sync") ? Endpoint::FX_TCR_OPERATION : Endpoint::FX_TCR_OPERATION_ASYNC, [
-                "operation" => $type,
-                "amount" => $amount
-            ]);
+            $res = $this->sendPayload(($method == "sync") ? Endpoint::FX_TCR_OPERATION : Endpoint::FX_TCR_OPERATION_ASYNC, $tcr);
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());
         }
