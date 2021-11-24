@@ -175,9 +175,9 @@ class InvoiceItem
     }
 
     /**
-     * @param float $vatRate
+     * @param float|string $vatRate
      */
-    public function setVatRate(float $vatRate)
+    public function setVatRate($vatRate)
     {
         $this->vatRate = $vatRate;
     }

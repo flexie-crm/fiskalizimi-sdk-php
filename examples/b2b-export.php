@@ -41,7 +41,18 @@ foreach([1, 2] as $_) {
     $item->setPrice(100);
     $item->setQtyUnit("Cope");
     $item->setQtyUnitUblCode("XPP");
-    $item->setVatRate(0.00);
+
+    // VAT Rate should be one of the following
+    // 0.20
+    // 0.10
+    // 0.06
+    // 0.00
+    // MARGIN_SCHEME
+    // EXPORT_OF_GOODS
+    // TYPE_1
+    // TYPE_2
+    $item->setVatRate(Fx::VAT_EXPORT);
+
     $item->setTotalBeforeVat(100);
     $item->setTotalAfterVat(100);
     $item->setVatTotal(0);

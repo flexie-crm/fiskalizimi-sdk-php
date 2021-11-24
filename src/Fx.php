@@ -34,4 +34,9 @@ class Fx
     const BUSINESS_PROCESS_P1 = "P1";
     const BUSINESS_PROCESS_P2 = "P2";
     const BUSINESS_PROCESS_P6 = "P6";
+
+    const VAT_TYPE_1 = "TYPE_1";
+    const VAT_TYPE_2 = "TYPE_2";
+    const VAT_MARGIN = "MARGIN_SCHEME";
+    const VAT_EXPORT = "EXPORT_OF_GOODS";
 }
