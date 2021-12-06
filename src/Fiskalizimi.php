@@ -141,7 +141,7 @@ class Fiskalizimi
     /**
      * @throws Exception
      */
-    public function tcrOperation(string $type, float $amount, string $overrideTcrCode = null, $overrideChangeDateTime = null, $method = "sync"): bool
+    public function tcrOperation(string $type, float $amount, string $overrideTcrCode = null, $overrideChangeDateTime = null, $method = "sync"): string
     {
         if (!in_array($type, ["INITIAL", "WITHDRAW", "DEPOSIT"])) {
             throw new Exception("Bad TCR Operation, it should be either one of the following: INITIAL, WITHDRAW or DEPOSIT");
@@ -175,10 +175,10 @@ class Fiskalizimi
                 throw new Exception("There was an error at TCR Operation. Error Code " . $result["fz_error_code"] . ". Error Message " . $result["fz_error_message"]);
             }
 
-            return true;
+           return $result["fcdc"] ?? "";
         }
 
-        return false;
+        throw new Exception("There was an error at TCR Operation. Error Code " . $res->getStatusCode());
     }
 
     /**
