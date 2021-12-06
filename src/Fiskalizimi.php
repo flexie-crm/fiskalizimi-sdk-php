@@ -141,7 +141,7 @@ class Fiskalizimi
     /**
      * @throws Exception
      */
-    public function tcrOperation(string $type, float $amount, string $overrideTcrCode = null, $method = "sync"): bool
+    public function tcrOperation(string $type, float $amount, string $overrideTcrCode = null, $overrideChangeDateTime = null, $method = "sync"): bool
     {
         if (!in_array($type, ["INITIAL", "WITHDRAW", "DEPOSIT"])) {
             throw new Exception("Bad TCR Operation, it should be either one of the following: INITIAL, WITHDRAW or DEPOSIT");
@@ -154,6 +154,10 @@ class Fiskalizimi
 
         if ($overrideTcrCode) {
             $tcr["overrideTcrCode"] = $overrideTcrCode;
+        }
+
+        if ($overrideChangeDateTime) {
+            $tcr["overrideChangeDateTime"] = $overrideChangeDateTime;
         }
 
         try {
