@@ -53,4 +53,10 @@ abstract class Endpoint
         "key" => "zNWOTZIoiHmpChBmI5bk5AZfcD3pcyULlQAeQjD800yCh9Y0e9",
         "secret" => "kjKjyWWBm9ahVv7vKXOo6OpErGNqH2z1mkkUhhwDrHUmd2SX0G"
     ];
+
+    const FX_PARAMETER_VALIDATION = [
+        "url" => "https://fatura.flexie.io/listener/b0bda4b5346bfd8e266ba5dd424e6469/746e226fff913e76d5437078543f6eab",
+        "key" => "0v1rNC1uCeDBL3poj2ReW9y2suztrDuwPeUS51WuTt1qWWzdcB",
+        "secret" => "2ONCi87XRyGZh0jVdmbio9vaQEN3D3DFSriaAq7rYOrgOKc26n"
+    ];
 }

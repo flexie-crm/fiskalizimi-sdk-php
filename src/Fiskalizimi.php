@@ -254,6 +254,36 @@ class Fiskalizimi
     }
 
     /**
+     * @throws Exception
+     */
+    public function subscriptionParametersValidity(array $parametersToValidate): array
+    {
+        if (empty($parametersToValidate)) {
+            throw new Exception("There are no parameters to validate, please add parameters in order to send at Flexie for validation.");
+        }
+
+        try {
+            /**@var GuzzleResponse $res */
+            $res = $this->sendPayload(Endpoint::FX_PARAMETER_VALIDATION, $parametersToValidate);
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+
+        if ($res->getStatusCode() == 200) {
+            $result = json_decode($res->getBody(), true);
+
+            // Check if it's an ok response
+            if (!isset($result["ok"]) || !$result["ok"]) {
+                throw new Exception("There was an error at parameters validation endpoint");
+            }
+
+            return $result;
+        } else {
+            throw new Exception("Error on validating parameters at Flexie Service. Error Code " . $res->getStatusCode() . ". Error Message " . $res->getBody()->getContents());
+        }
+    }
+
+    /**
      * @param string[] $endpoint
      * @param array $payload
      * @return ResponseInterface

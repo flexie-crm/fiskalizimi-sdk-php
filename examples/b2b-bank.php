@@ -12,7 +12,7 @@ $invoice = new Invoice();
 
 // Invoice Details
 $invoice->setInvoiceType(Fx::B2B);
-$invoice->setBusinessProcess("P2");
+$invoice->setBusinessProcess(Fx::BUSINESS_PROCESS_P1);
 $invoice->setPaymentMethod(Fx::PAYMENT_METHOD_BANK);
 $invoice->setCurrency("ALL");
 $invoice->setVatTotal(40);
