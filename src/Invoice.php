@@ -145,6 +145,11 @@ class Invoice
     /**
      * @var array
      */
+    protected $flexieWorkflowAdditionalData;
+
+    /**
+     * @var array
+     */
     protected $errors = [];
 
     /**
@@ -619,6 +624,22 @@ class Invoice
     private function setErrors(string $error)
     {
         $this->errors[] = $error;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFlexieWorkflowAdditionalData(): array
+    {
+        return $this->flexieWorkflowAdditionalData;
+    }
+
+    /**
+     * @param array $flexieWorkflowAdditionalData
+     */
+    public function setFlexieWorkflowAdditionalData(array $flexieWorkflowAdditionalData)
+    {
+        $this->flexieWorkflowAdditionalData = $flexieWorkflowAdditionalData;
     }
 
     /**
