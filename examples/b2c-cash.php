@@ -18,6 +18,10 @@ $invoice->setVatTotal(40);
 $invoice->setTotalBeforeVat(200);
 $invoice->setTotalAfterVat(240);
 
+// Override with your own offline procedure to derive invoice number and date time issued
+// $invoice->overrideInvoiceNumber("648/2021/zj146cd142");
+// $invoice->overrideDateTimeIssued("2021-12-21T22:05:45+01:00");
+
 foreach([1, 2] as $_) {
     $item = new InvoiceItem();
 
@@ -37,6 +41,7 @@ foreach([1, 2] as $_) {
 
 // Initialize main fiskalizimi object with your Flexie CRM KEY
 $fiskalizimi = new Fiskalizimi("Tw8Yewd1U0d4hViNzGrbLliRlteKTMBT");
+$fiskalizimi->timeout = 5;
 
 try {
     // Send it to Flexie CRM to finalize the Fiskalizimi process,

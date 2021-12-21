@@ -15,7 +15,7 @@ try {
         // Business unit code configured in Flexie CRM for this account key
         "businessUnitCode" => "om609ur125",
         // Operator Code configured in Flexie CRM for this account key
-        "operatorCode" => "	vp233km645",
+        "operatorCode" => "vp233km645",
         // Cash register code created from Flexie CRM for this account at signup time
         "tcrCode" => "zj146cd142",
         // Issuer Nuis configured in Flexie CRM for this account key

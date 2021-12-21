@@ -10,6 +10,16 @@ class Invoice
     /**
      * @var string
      */
+    protected $invoiceNumber;
+
+    /**
+     * @var string
+     */
+    protected $dateTimeIssued;
+
+    /**
+     * @var string
+     */
     protected $operatorCode;
 
     /**
@@ -182,6 +192,38 @@ class Invoice
     public function overrideTcrCode(string $tcrCode)
     {
         $this->tcrCode = $tcrCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceNumber(): string
+    {
+        return $this->invoiceNumber;
+    }
+
+    /**
+     * @param string $invoiceNumber
+     */
+    public function overrideInvoiceNumber(string $invoiceNumber)
+    {
+        $this->invoiceNumber = $invoiceNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateTimeIssued(): string
+    {
+        return $this->dateTimeIssued;
+    }
+
+    /**
+     * @param string $dateTimeIssued
+     */
+    public function overrideDateTimeIssued(string $dateTimeIssued)
+    {
+        $this->dateTimeIssued = $dateTimeIssued;
     }
 
     /**

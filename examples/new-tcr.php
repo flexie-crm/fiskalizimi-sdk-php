@@ -11,7 +11,7 @@ $fiskalizimi = new Fiskalizimi("Tw8Yewd1U0d4hViNzGrbLliRlteKTMBT");
 
 try {
     // Create a new TCR, it would return the new TCR Code
-    $newTcr = $fiskalizimi->addTcr("Flexie-CRM/randomId", new DateTime("now"), new DateTime("+1 Year"));
+    $newTcr = $fiskalizimi->addTcr("Flexie-CRM/" . uniqid(), new DateTime("now"));
     echo $newTcr;
 } catch (Exception $e) {
     print_r($e->getMessage());

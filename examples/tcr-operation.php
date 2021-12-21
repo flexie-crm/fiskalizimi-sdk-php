@@ -11,10 +11,16 @@ $fiskalizimi = new Fiskalizimi("Tw8Yewd1U0d4hViNzGrbLliRlteKTMBT");
 
 try {
     // Operations in TCR, INITIAL, DEPOSIT, WITHDRAW
-    $operation = $fiskalizimi->tcrOperation("INITIAL", 0.00, null, null,Fx::ASYNC);
-    print_r($operation);
+    // $operation = $fiskalizimi->tcrOperation("INITIAL", 0.00, null, null,Fx::ASYNC);
+    // print_r($operation);
 
-    $operation = $fiskalizimi->tcrOperation("DEPOSIT", 2000.00, null, null,Fx::SYNC);
+    $operation = $fiskalizimi->tcrOperation(
+        "DEPOSIT",
+        2000.00,
+        null,
+        "2021-12-10T10:44:05+01:00",
+        Fx::SYNC
+    );
     print_r($operation);
 } catch (Exception $e) {
     print_r($e->getMessage());

@@ -10,7 +10,7 @@ $fiskalizimi = new Fiskalizimi("Tw8Yewd1U0d4hViNzGrbLliRlteKTMBT");
 
 try {
     // Get Invoice EIC code from your invoice NIVF Code
-    $eic = $fiskalizimi->getEInvoiceCode("cc8d08a4-e46e-4442-a2c5-6e8073c05fc9");
+    $eic = $fiskalizimi->getEInvoiceCode("9081b311-0ddb-486e-b007-62d6a1464c3d");
     echo $eic;
 } catch (Exception $e) {
     print_r($e->getMessage());

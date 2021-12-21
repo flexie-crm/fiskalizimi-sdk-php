@@ -13,9 +13,15 @@ use Psr\Http\Message\ResponseInterface;
 class Fiskalizimi
 {
     /**
+     * @var float
+     */
+    public $timeout = 0;
+
+    /**
      * @var Invoice
      */
     protected $invoice;
+
     /**
      * @var string
      */
@@ -301,6 +307,7 @@ class Fiskalizimi
         ], $endpoint["secret"]);
 
         $client = new Client([
+            'timeout' => $this->timeout,
             'base_uri' => $endpoint["url"],
             'headers' => [
                 'Content-Type' => 'application/json',
