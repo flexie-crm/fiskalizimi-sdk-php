@@ -51,6 +51,12 @@ $invoice->setBankName("Some Random Bank");
 $invoice->setBankSwift("ALBBALS");
 $invoice->setBankIban("AL00010001111111111111111111");
 
+// You can send additional data to Flexie CRM in case you have a full subscription
+// and want to create integrations or getting deeper with your financial data
+// $invoice->setFlexieWorkflowAdditionalData([
+//     "customData" => "Custom Data",
+// ]);
+
 // Obviously here would be your own items
 foreach([1, 2] as $_) {
     $item = new InvoiceItem();
