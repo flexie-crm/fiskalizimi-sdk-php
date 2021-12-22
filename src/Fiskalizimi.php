@@ -18,6 +18,16 @@ class Fiskalizimi
     public $timeout = 0;
 
     /**
+     * @var int
+     */
+    public $connectTimeout = 0;
+
+    /**
+     * @var int
+     */
+    public $readTimeout = 60;
+
+    /**
      * @var Invoice
      */
     protected $invoice;
@@ -308,6 +318,8 @@ class Fiskalizimi
 
         $client = new Client([
             'timeout' => $this->timeout,
+            'connect_timeout' => $this->connectTimeout,
+            'read_timeout' => $this->readTimeout,
             'base_uri' => $endpoint["url"],
             'headers' => [
                 'Content-Type' => 'application/json',
