@@ -138,6 +138,16 @@ class Invoice
     protected $totalAfterVat = 0.00;
 
     /**
+     * @var string
+     */
+    protected $referenceInvoiceNslf;
+
+    /**
+     * @var string
+     */
+    protected $referenceInvoiceDateTimeIssued;
+
+    /**
      * @var array
      */
     protected $items = [];
@@ -650,6 +660,38 @@ class Invoice
     private function setPaymentType(string $paymentType)
     {
         $this->paymentType = $paymentType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferenceInvoiceNslf(): string
+    {
+        return $this->referenceInvoiceNslf;
+    }
+
+    /**
+     * @param string $referenceInvoiceNslf
+     */
+    public function setReferenceInvoiceNslf(string $referenceInvoiceNslf)
+    {
+        $this->referenceInvoiceNslf = $referenceInvoiceNslf;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferenceInvoiceDateTimeIssued(): string
+    {
+        return $this->referenceInvoiceDateTimeIssued;
+    }
+
+    /**
+     * @param string $referenceInvoiceDateTimeIssued
+     */
+    public function setReferenceInvoiceDateTimeIssued(string $referenceInvoiceDateTimeIssued)
+    {
+        $this->referenceInvoiceDateTimeIssued = $referenceInvoiceDateTimeIssued;
     }
 
     /**

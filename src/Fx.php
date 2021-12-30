@@ -10,6 +10,7 @@ class Fx
     const B2C = "b2c";
     const AUTO_INVOICE = "auto";
     const EXPORT_INVOICE = "export";
+    const CORRECTIVE_INVOICE = "corrective";
 
     const AUTO_INVOICE_AGREEMENT = "AGREEMENT";
     const AUTO_INVOICE_DOMESTIC = "DOMESTIC";
